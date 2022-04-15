@@ -1,4 +1,6 @@
 language: go
+go:
+  - 1.9.x
 before_script: sudo redis-server /etc/redis/redis.conf --port 7777
 script: go test -cover
 notifications:
