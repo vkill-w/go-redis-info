@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>redis-info: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/itsshashank/redis-info/redis-info.go (93.8%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package redisinfo
+
+import (
+        "encoding/json"
+        "fmt"
+        "strings"
+)
+
+type Info struct {
+        Server Server `json:"server"`
+        Client Client `json:"clients"`
+}
+
+type Server struct {
+        RedisVersion    string `json:"redis_version"`
+        RedisGitSha1    string `json:"redis_git_sha1"`
+        RedisGitDirty   string `json:"redis_git_dirty"`
+        RedisBuildID    string `json:"redis_build_id"`
+        RedisMode       string `json:"redis_mode"`
+        OS              string `json:"os"`
+        ArchBits        string `json:"arch_bits"`
+        MultiplexingAPI string `json:"multiplexing_api"`
+        GCCVersion      string `json:"gcc_version"`
+        ProcessID       string `json:"process_id"`
+        RunID           string `json:"run_id"`
+        TCPPort         string `json:"tcp_port"`
+        UptimeInSeconds string `json:"uptime_in_seconds"`
+        UptimeInDays    string `json:"uptime_in_days"`
+        HZ              string `json:"hz"`
+        LRUClock        string `json:"lru_clock"`
+        Executable      string `json:"executable"`
+        ConfigFile      string `json:"config_file"`
+        IOThreadsActive string `json:"io_threads_active"`
+}
+
+type Client struct {
+        ConnectedClients            string `json:"connected_clients"`
+        ClientRecentMaxOutputBuffer string `json:"client_recent_max_output_buffer"`
+        ClientRecentMaxInputBuffer  string `json:"client_recent_max_input_buffer"`
+        BlockedClients              string `json:"blocked_clients"`
+        ClientsInTimeoutTable       string `json:"clients_in_timeout_table"`
+        TrackingClients             string `json:"tracking_clients"`
+}
+
+type Memory struct {
+        UsedMemory             string `json:"used_memory"`
+        UsedMemoryHuman        string `json:"used_memory_human"`
+        UsedMemoryRss          string `json:"used_memory_rss"`
+        UsedMemoryRssHuman     string `json:"used_memory_rss_human"`
+        UsedMemoryPeak         string `json:"used_memory_peak"`
+        UsedMemoryPeakHuman    string `json:"used_memory_peak_human"`
+        TotalSystemMemory      string `json:"total_system_memory"`
+        TotalSystemMemoryHuman string `json:"total_system_memory_human"`
+        UsedMemoryLua          string `json:"used_memory_lua"`
+        UsedMemoryLuaHuman     string `json:"used_memory_lua_human"`
+        Maxmemory              string `json:"maxmemory"`
+        MaxmemoryHuman         string `json:"maxmemory_human"`
+        MaxmemoryPolicy        string `json:"maxmemory_policy"`
+        MemFragmentationRatio  string `json:"mem_fragmentation_ratio"`
+        MemAllocator           string `json:"mem_allocator"`
+}
+
+type Persistence struct {
+        Loading                  string `json:"loading"`
+        RdbChangesSinceLastSave  string `json:"rdb_changes_since_last_save"`
+        RdbBgsaveInProgress      string `json:"rdb_bgsave_in_progress"`
+        RdbLastSaveTime          string `json:"rdb_last_save_time"`
+        RdbLastBgsaveStatus      string `json:"rdb_last_bgsave_status"`
+        RdbLastBgsaveTimeSec     string `json:"rdb_last_bgsave_time_sec"`
+        RdbCurrentBgsaveTimeSec  string `json:"rdb_current_bgsave_time_sec"`
+        AofEnabled               string `json:"aof_enabled"`
+        AofRewriteInProgress     string `json:"aof_rewrite_in_progress"`
+        AofRewriteScheduled      string `json:"aof_rewrite_scheduled"`
+        AofLastRewriteTimeSec    string `json:"aof_last_rewrite_time_sec"`
+        AofCurrentRewriteTimeSec string `json:"aof_current_rewrite_time_sec"`
+        AofLastBgrewriteStatus   string `json:"aof_last_bgrewrite_status"`
+        AofLastWriteStatus       string `json:"aof_last_write_status"`
+}
+
+type Stats struct {
+        TotalConnectionsReceived string `json:"total_connections_received"`
+        TotalCommandsProcessed   string `json:"total_commands_processed"`
+        InstantaneousOpsPerSec   string `json:"instantaneous_ops_per_sec"`
+        TotalNetInputBytes       string `json:"total_net_input_bytes"`
+        TotalNetOutputBytes      string `json:"total_net_output_bytes"`
+        InstantaneousInputKbps   string `json:"instantaneous_input_kbps"`
+        InstantaneousOutputKbps  string `json:"instantaneous_output_kbps"`
+        RejectedConnections      string `json:"rejected_connections"`
+        SyncFull                 string `json:"sync_full"`
+        SyncPartialOk            string `json:"sync_partial_ok"`
+        SyncPartialErr           string `json:"sync_partial_err"`
+        ExpiredKeys              string `json:"expired_keys"`
+        EvictedKeys              string `json:"evicted_keys"`
+        KeyspaceHits             string `json:"keyspace_hits"`
+        KeyspaceMisses           string `json:"keyspace_misses"`
+        PubsubChannels           string `json:"pubsub_channels"`
+        PubsubPatterns           string `json:"pubsub_patterns"`
+        LatestForkUsec           string `json:"latest_fork_usec"`
+        MigrateCachedSockets     string `json:"migrate_cached_sockets"`
+}
+
+type Replication struct {
+        Role                       string `json:"role"`
+        ConnectedSlaves            string `json:"connected_slaves"`
+        Slaves                     string `json:"slave"`
+        MasterReplOffset           string `json:"master_repl_offset"`
+        ReplBacklogActive          string `json:"repl_backlog_active"`
+        ReplBacklogSize            string `json:"repl_backlog_size"`
+        ReplBacklogFirstByteOffset string `json:"repl_backlog_first_byte_offset"`
+        ReplBacklogHistLen         string `json:"repl_backlog_histlen"`
+}
+
+type CPU struct {
+        UsedCPUSys          string `json:"used_cpu_sys"`
+        UsedCPUUser         string `json:"used_cpu_user"`
+        UsedCPUSysChildren  string `json:"used_cpu_sys_children"`
+        UsedCPUUserChildren string `json:"used_cpu_user_children"`
+}
+
+type Modules struct{}
+
+type Cluster struct {
+        ClusterEnabled string `json:"cluster_enabled"`
+}
+
+type Keyspace struct {
+        DB      string `json:"db,omitempty" index:"true"`
+        Keys    string `json:"keys"`
+        Expires string `json:"expires"`
+        AvgTTL  string `json:"avg_ttl"`
+}
+
+func Parse(info string) []byte <span class="cov8" title="1">{
+
+        contentPerCategory := make(map[string]map[string]string)
+        content := strings.ReplaceAll(info, "\r", "")
+        lines := strings.Split(content, "\n")
+        category := ""
+        for _, line := range lines </span><span class="cov8" title="1">{
+                if line == "" </span><span class="cov8" title="1">{
+                        continue</span>
+                } else<span class="cov8" title="1"> if strings.HasPrefix(line, "#") </span><span class="cov8" title="1">{
+                        category = strings.ToLower(line[2:])
+                        contentPerCategory[category] = make(map[string]string)
+                }</span> else<span class="cov8" title="1"> {
+                        contents := strings.Split(line, ":")
+                        contentPerCategory[category][contents[0]] = contents[1]
+                }</span>
+        }
+        <span class="cov8" title="1">redisInfo, err := json.Marshal(contentPerCategory)
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Printf("Error: %s", err.Error())
+        }</span>
+        <span class="cov8" title="1">return redisInfo</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

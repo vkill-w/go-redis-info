@@ -1,0 +1,10 @@
+mode: set
+github.com/itsshashank/redis-info/redis-info.go:133.32,139.29 5 1
+github.com/itsshashank/redis-info/redis-info.go:150.2,151.16 2 1
+github.com/itsshashank/redis-info/redis-info.go:154.2,154.18 1 1
+github.com/itsshashank/redis-info/redis-info.go:139.29,140.17 1 1
+github.com/itsshashank/redis-info/redis-info.go:140.17,141.12 1 1
+github.com/itsshashank/redis-info/redis-info.go:142.9,142.42 1 1
+github.com/itsshashank/redis-info/redis-info.go:142.42,145.4 2 1
+github.com/itsshashank/redis-info/redis-info.go:145.9,148.4 2 1
+github.com/itsshashank/redis-info/redis-info.go:151.16,153.3 1 0
