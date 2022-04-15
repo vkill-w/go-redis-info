@@ -1,4 +1,5 @@
-# redis-info <div style="text-align: right"> [![Build Status](https://app.travis-ci.com/itsshashank/redis-info.svg?branch=main)](https://app.travis-ci.com/itsshashank/redis-info) </div>    
+# redis-info  
+[![Build Status](https://app.travis-ci.com/itsshashank/redis-info.svg?branch=main)](https://app.travis-ci.com/itsshashank/redis-info)
 
 Package to parse redis.Info to access different sections 
 
