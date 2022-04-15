@@ -1,0 +1,5 @@
+language: go
+before_script: sudo redis-server /etc/redis/redis.conf --port 7777
+script: go test -cover
+notifications:
+  email: false

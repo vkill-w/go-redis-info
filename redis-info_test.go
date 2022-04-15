@@ -31,7 +31,7 @@ func TestParse(t *testing.T) {
 			"clients",
 			Client{
 				ConnectedClients:            "1",
-				ClientRecentMaxInputBuffer:  "8",
+				ClientRecentMaxInputBuffer:  "0",
 				ClientRecentMaxOutputBuffer: "0",
 				BlockedClients:              "0",
 				TrackingClients:             "0",
@@ -51,7 +51,7 @@ func TestParse(t *testing.T) {
 				panic(err)
 			}
 			if !reflect.DeepEqual(rinfo.Client, tt.want) {
-				t.Errorf("Parse() = %v, want %v", got, tt.want)
+				t.Errorf("Parse() = %v, want %v", rinfo.Client, tt.want)
 			}
 		})
 	}
