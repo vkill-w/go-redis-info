@@ -3,6 +3,8 @@ package redisinfo
 import (
 	"encoding/json"
 	"fmt"
+	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
+	"github.com/go-redis/redis"
 	"strings"
 )
 
@@ -144,7 +146,7 @@ func Parse(info string) []byte {
 			contentPerCategory[category] = make(map[string]string)
 		} else {
 			contents := strings.Split(line, ":")
-			contentPerCategory[category][contents[0]] = contents[1]
+			contentPerCategory[category][firstUpper(contents[0])] = contents[1]
 		}
 	}
 	redisInfo, err := json.Marshal(contentPerCategory)
@@ -152,4 +154,86 @@ func Parse(info string) []byte {
 		fmt.Printf("Error: %s", err.Error())
 	}
 	return redisInfo
+}
+
+func LParseInfo(redisInstanceName, redisEndpoint string) []byte {
+	client := redisClient(redisEndpoint)
+	result, err := client.Info().Result()
+	if err != nil {
+		fmt.Printf("LParseInfo error : %s", err.Error())
+	}
+	parseBytes := Parse(result)
+	json := jsonvalue.MustUnmarshal(parseBytes)
+	json.Set(redisInstanceName).At("RedisInstaceName")
+	redisInfo, _ := json.Marshal()
+	return redisInfo
+}
+
+func LParseClients(redisInstanceName, redisEndpoint string) [][]byte {
+	client := redisClient(redisEndpoint)
+
+	result, err := client.ClientList().Result()
+	if err != nil {
+		fmt.Printf("LParseInfo error : %s", err.Error())
+	}
+	parseBytes := ParseClients(result)
+	redisInfo := addInstanceName(parseBytes, redisInstanceName)
+	return redisInfo
+}
+
+func addInstanceName(parseBytes []byte, redisInstance string) [][]byte {
+	var redisInfo [][]byte
+	mustUnmarshal := jsonvalue.MustUnmarshal(parseBytes)
+	for _, obj := range mustUnmarshal.ForRangeArr() {
+		obj.Set(redisInstance).At("RedisInstaceName")
+		marshal, _ := obj.Marshal()
+		redisInfo = append(redisInfo, marshal)
+	}
+	return redisInfo
+}
+
+func ParseClients(info string) []byte {
+
+	contentPerCategory := make([]map[string]string, 0)
+	content := strings.ReplaceAll(info, "\r", "")
+	lines := strings.Split(content, "\n")
+	for _, line := range lines {
+		if line == "" {
+			continue
+		} else {
+			mTemp := map[string]string{}
+			contentsElem := strings.Split(line, " ")
+			for _, elem := range contentsElem {
+				contents := strings.Split(elem, "=")
+				if strings.Contains(contents[1], ":") {
+					mTemp[firstUpper(contents[0])] = strings.Split(contents[1], ":")[0]
+				} else {
+					mTemp[firstUpper(contents[0])] = contents[1]
+				}
+			}
+			contentPerCategory = append(contentPerCategory, mTemp)
+		}
+	}
+	clientsInfo, err := json.Marshal(contentPerCategory)
+	if err != nil {
+		fmt.Printf("Error: %s", err.Error())
+	}
+	return clientsInfo
+}
+
+func firstUpper(s string) string {
+	if s == "" {
+		return ""
+	}
+	return strings.ToUpper(s[:1]) + s[1:]
+}
+
+func redisClient(endpoint string) *redis.Client {
+
+	redisClient := redis.NewClient(&redis.Options{
+		Addr: endpoint,
+		DB:   0,
+	})
+
+	return redisClient
 }
