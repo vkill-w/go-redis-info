@@ -1,4 +1,4 @@
-module github.com/itsshashank/redis-info
+module github.com/vkill-w/go-redis-info
 
 go 1.17
 

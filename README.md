@@ -12,19 +12,9 @@ import (
 	"fmt"
 
 	"github.com/go-redis/redis"
-	redisinfo "github.com/itsshashank/redis-info"
+	redisinfo "github.com/vkill-wu/redis-info"
 )
 
-// declare your own custom structure to retrive relavent info
-type Info struct {
-	redisinfo.Server `json:"server"`
-	Client           Client `json:"clients"`
-}
-
-// extend more values into a pre written section
-type Client struct {
-	redisinfo.Client
-}
 
 func main() {
 

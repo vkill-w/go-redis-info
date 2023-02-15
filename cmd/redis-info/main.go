@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/itsshashank/redis-info"
+	"github.com/vkill-w/go-redis-info"
 )
 
 func main() {
